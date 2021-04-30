@@ -1,0 +1,11 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © paulwongx
+
+//@version=3
+strategy("Multi Timeframe RSI", shorttitle="MTF_RSI")
+
+rsi5m = security(ticker,"5",rsi(close,14))
+plot(rsi5m, color=interval < 5 and not isdaily and not isweekly and not ismonthly  ? #8E1599 : na, title="RSI 5m")
+band1 = hline(70, "Upper Band", color=#C0C0C0)
+band0 = hline(30, "Lower Band", color=#C0C0C0)
+fill(band1, band0, color=#9915FF, transp=90, title="Background")

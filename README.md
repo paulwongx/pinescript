@@ -75,3 +75,4 @@ bar_index                   Current bar index. 0 to infinity
 [Kelly Criterion in PineScript](https://www.tradingview.com/script/20AKzpqU-Trailing-Kelly-Ratio/)
 [Pinescript Indicators](https://github.com/everget/tradingview-pinescript-indicators)
 [Pine Script Documentation](https://www.tradingview.com/pine-script-reference/v4/)
+[Kodify Example Strategies](https://kodify.net/tradingview/strategies/)

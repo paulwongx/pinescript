@@ -1,0 +1,24 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © paulwongx
+
+//@version=4
+strategy("RSI 5m", initial_capital=100000)
+
+var rsi5m = 0.0
+var enterLong = false
+var exitLong = false
+
+rsi5m := security(ticker,"5",rsi(close,14))
+enterLong := crossover(rsi5m, 30)
+exitLong := crossunder(rsi5m, 70)
+
+plot(rsi5m, color=timeframe.period < 5 and not timeframe.isdaily and not timeframe.isweekly and not timeframe.ismonthly  ? #8E1599 : na, title="RSI 5m")
+band1 = hline(70, "Upper Band", color=#C0C0C0)
+band0 = hline(30, "Lower Band", color=#C0C0C0)
+fill(band1, band0, color=#9915FF, transp=90, title="Background")
+
+if(strategy.opentrades == 0 and enterLong and not(na(rsi5m)))
+    if(enterLong)
+        strategy.entry("buy1", long=true, limit=1, qty=100)
+    if(exitLong)
+        strategy.exit("buy1", stop=1)

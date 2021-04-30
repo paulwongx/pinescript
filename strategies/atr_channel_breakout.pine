@@ -1,4 +1,5 @@
 //@version=3
+// https://kodify.net/tradingview/strategies/atr-channel-breakout/
 // 1. Define strategy settings
 strategy(title="ATR Channel Breakout", overlay=true,
      pyramiding=0, initial_capital=100000,

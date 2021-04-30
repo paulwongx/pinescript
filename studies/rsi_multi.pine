@@ -1,3 +1,4 @@
+//@version=3
 study("Multi Timeframe RSI", shorttitle="MTF_RSI")
 len = input(14, title="Length", type=integer)
 src = input(close, title="Source", type=source)
