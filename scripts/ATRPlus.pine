@@ -1,0 +1,41 @@
+// @version=4
+study("ATR+ (Stop Loss Indicator)", "ATR+", overlay=false, precision=1)
+
+// Get user input
+riskratio = input(title="R/R:", type=input.float, defval=1, minval=0.1)
+atrLength = input(title="ATR Length:", type=input.integer, defval=14, minval=1)
+lookback = input(title="How Far To Look Back For High/Lows:", type=input.integer, defval=3, minval=1)
+stopSizeInput = input(title="Stop Distance (in pips or ATR):", type=input.float, defval=1.0, minval=0.0)
+stopSizeUseATR = input(title="Use ATR Multiplier for stop loss?", type=input.bool, defval=true)
+
+// Custom function to convert pips into whole numbers
+toWhole(number) =>
+    eurjpyreturn = atr(14) < 1.0 ? (number / syminfo.mintick) / (10 / syminfo.pointvalue) : number
+    return := atr(14) >= 1.0 and atr(14) < 100.0 and syminfo.currency == "JPY" ? return * 100 : return
+
+// Custom function to convert whole numbers back into pips
+toPips(number) =>
+    return = atr(14) >= 1.0 ? number : (number * syminfo.mintick) * (10 / syminfo.pointvalue)
+    return := atr(14) >= 1.0 and atr(14) < 100.0 and syminfo.currency == "JPY" ? return / 100 : return
+
+// Calculate ATR & convert it from points into a whole number
+atrValue = atr(atrLength)
+atrWhole = toWhole(atrValue)
+
+// Convert our fixed pip stop size into a whole number for use later if using a fixed stop size
+stopSize = toPips(stopSizeInput)
+
+// Multiply our stop size by our ATR multiplier (if using ATR multiplier)
+if stopSizeUseATR
+    stopSize := atrValue * stopSizeInput
+
+// Get SL pips
+longEntrySize = toWhole((close - lowest(low, lookback) + stopSize))
+shortEntrySize = toWhole((highest(high, lookback) - close + stopSize))
+
+// Plot data
+plot(atrWhole, color=color.teal, style=plot.style_circles, title="ATR", transp=100)
+plot(longEntrySize, color=color.green, style=plot.style_circles, title="Long Entry Size", transp=100)
+plot(longEntrySize * riskratio, color=color.green, style=plot.style_circles, title="Long Target Size", transp=100)
+plot(shortEntrySize, color=color.red, style=plot.style_circles, title="Short Entry Size", transp=100)
+plot(shortEntrySize * riskratio, color=color.red, style=plot.style_circles, title="Short Target Size", transp=100)

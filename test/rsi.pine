@@ -1,0 +1,17 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © paulwongx
+
+//@version=4
+strategy("Buy when RSI_5m < 30", overlay=true)
+
+var co = false
+var rsi = 0.0
+var rsi5m = 0.0
+
+rsi := rsi(close, 7)
+rsi5m := security(syminfo.tickerid,"5",rsi(close,7))
+co := crossover(rsi, 30)
+
+if(strategy.opentrades == 0 and co and not(na(rsi)))
+    if (co)
+        strategy.entry("buy1", long=strategy.long, when=co, limit=1)

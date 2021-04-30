@@ -1,0 +1,5 @@
+pine_rma(x, y) =>
+	alpha = 1/y
+    sum = 0.0
+    sum := alpha * x + (1 - alpha) * nz(sum[1]) // nz replaces NaN values with zero
+plot(pine_rma(close, 15))
